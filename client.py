@@ -46,10 +46,10 @@ async def run():
             result = await session.call_tool("look", arguments={})
             room = json.loads(result.content[0].text)
 
-            console.print(f"[cyan]{room['title']}", justify="center")
-            console.print(room["description"])
-
             while True:
+                console.print(f"[cyan]{room['title']}", justify="center")
+                console.print(room["description"])
+
                 cmd = console.input("[green]> ")
 
                 # TODO: Have this be an agent with access to tools
@@ -57,20 +57,13 @@ async def run():
                     break
                 elif cmd in ["north", "south", "east", "west"]:
                     result = await session.call_tool("go", arguments={"direction": cmd})
-                    # Updates to server context / state are in "bold magenta"
                     console.print(f"[bold magenta]{result.content[0].text}")
-
                     result = await session.call_tool("look", arguments={})
                     room = json.loads(result.content[0].text)
-
-                    console.print(f"[cyan]{room['title']}", justify="center")
-                    console.print(room["description"])
                 elif cmd == "look":
-                    result = await session.call_tool("look", arguments={})
-                    room = json.loads(result.content[0].text)
-
-                    console.print(f"[cyan]{room['title']}", justify="center")
-                    console.print(room["description"])
+                    pass
+                else:
+                    console.print("[bold red]Unknown command.")
 
 
 if __name__ == "__main__":
